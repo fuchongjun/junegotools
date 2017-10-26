@@ -21,7 +21,27 @@ func DoGet(url string, contenttype string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	request.Header.Add("Content-Type", contenttype)
+	if contenttype != "" {
+		request.Header.Add("Content-Type", contenttype)
+
+	}
+	respons, err := client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+	defer respons.Body.Close()
+	return ioutil.ReadAll(respons.Body)
+}
+func DoDelete(url string, contenttype string) ([]byte, error) {
+	client := http.DefaultClient
+	request, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	if contenttype != "" {
+		request.Header.Add("Content-Type", contenttype)
+
+	}
 	respons, err := client.Do(request)
 	if err != nil {
 		return nil, err
